@@ -88,7 +88,7 @@ const myUser = new mongoose.Schema({
     userImage: {
         type: String
     },
-    date: {
+    accountDate: {
         type: String,
         default: Date.now
     },

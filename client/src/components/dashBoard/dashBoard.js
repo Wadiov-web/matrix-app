@@ -67,7 +67,9 @@ class DashBoard extends Component {
                                 />
                             }} />
                             <Route exact path="/dashBoard/notifications" component={Notification} />
-                            <Route path={proPath} component={Profile} />
+                            <Route path={proPath} render={() => {
+                                return <Profile myprop={this.props.props} />
+                            }} />
                             <Route exact path="/dashBoard/about" component={About} />
 
                             <Route path={visitPro} component={Visited} />

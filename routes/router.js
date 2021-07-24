@@ -7,7 +7,7 @@ const path = require('path')
 const suggestedUsers = require('./suggestedUsers')
 const notifications = require('./notifications')
 const friendsAndMessages = require('./friends&messages')
-//const profileApi = require('./profileApi')
+const profileApi = require('./profileApi')
 //const visitedUserApi = require('./visitedUserApi')
 
 const multer = require('multer')
@@ -163,7 +163,7 @@ router.get('/api/user', isAuth, (req, res) => {
 router.use(suggestedUsers)
 router.use(notifications)
 router.use(friendsAndMessages)
-// router.use(profileApi)
+router.use(profileApi)
 // router.use(visitedUserApi)
 
 

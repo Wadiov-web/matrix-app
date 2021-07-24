@@ -1,18 +1,22 @@
 import { React, Component} from 'react'
 import '../profile.css'
 import { FaBirthdayCake, FaEnvelope, FaGlobeAmericas, FaMale, FaMapMarked, FaMapMarkerAlt, FaPhoneAlt, FaMapMarker, FaFemale } from 'react-icons/fa'
-
+import axios from 'axios'
 
 class Infos extends Component{
     state = {
-      account: {email: 'helloworld@gmail.com'},
-      contact: {phone: '+192-548-254-541', address: 'NYC fifth avenue 15 Street', email: 'hello@gmail.com', site: 'www.hello.com'},
-      places: {currentCity: 'New York', homeTown: 'Silicon Vally'},
-      basics: {birthday: '01/01/1999', gender: 'Male'}
+        basics: {},
+        contact: {},
+        places: {}
     }
 
     componentDidMount(){
-        //this.setState({places: {currentCity: 'New York', homeTown: 'Silicon Vally'}})
+        axios.get('/api/get-infos')
+        .then(res => {
+            this.setState(() => (
+                {basics: res.data.basics, contact: res.data.contact, places: res.data.contact}
+            ))
+        }).catch(err => console.log(err))
     }
 
     render() {
@@ -26,9 +30,8 @@ class Infos extends Component{
                     <div class="flexit">
                         <FaEnvelope className="infIcon" />
                         <p id="bold">Email-address:</p>
-                        <p>{this.state.account.email}</p>
+                        <p>{this.state.basics.email}</p>
                     </div>
-                    
                 </div>
 
 
@@ -86,6 +89,12 @@ class Infos extends Component{
                         <p id="bold">Gender:</p>
                         
                         <p>{this.state.basics.gender}</p>
+                    </div>
+                    <div class="flexit">
+                        
+                        <p id="bold">Date:</p>
+                        
+                        <p>{this.state.basics.accountDate}</p>
                     </div>
                 </div>
 

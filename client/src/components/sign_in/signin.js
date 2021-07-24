@@ -19,33 +19,25 @@ class Signin extends Component {
     submitForm = (e) => {
         e.preventDefault();
 
-        if (this.state.email === '' || this.state.password === '') {
-            this.setState({error: 'Please fill in all fields!'});
-            setTimeout(() => this.setState({error: ''}), 3000);
-        } else {
-            // Post user to server
-            const packet ={
-                email: this.state.email,
-                password: this.state.password
-            }
-            axios.post('/login', packet)
-            .then(res => {
-                let status = res.data.msg;
-                if(status == 'user not found') {
-                    this.setState({error: status});
-                }
-                if(status == 'password incorrect') {
-                    this.setState({error: status});
-                }
-                if(res.data.loggedIn == true) {
-                    
-                    localStorage.setItem('SignedInStatus', true)
-                    this.props.props.history.push('/dashBoard/home')
-                }
-            }).catch(err => console.log(err));
+        // Post user to server
+        const packet = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        axios.post('/signin', packet)
+        .then(res => {
+            
+            this.setState({error: res.data.msg})
+            setTimeout(() => this.setState({error: ''}), 3000)
 
-            this.setState({email: '', password: ''})
-        } 
+            if(res.data.loggedIn) {
+                localStorage.setItem('SignedInStatus', true)
+                this.props.props.history.push('/dashBoard/home')
+            }
+        }).catch(err => console.log(err));
+
+        this.setState({email: '', password: ''})
+    
     }
 
     inputHandler = (e) => this.setState({[e.target.name]: e.target.value})

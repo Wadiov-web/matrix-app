@@ -24,7 +24,7 @@ class Profile extends Component {
         .then(res => {
             if (res.status == 200) {
                 localStorage.setItem('SignedInStatus', false)
-                this.props.props.history.push('/signin');
+                this.props.myprop.history.push('/signin')
             } else {
                 console.log('Server could not log out user')
             }

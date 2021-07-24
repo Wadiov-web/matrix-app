@@ -68,12 +68,12 @@ router.post('/api/update-infos', (req, res) => {
                 const {phone, address, email, site} = loggedIn.contact
                 const {currentCity, hometown} = loggedIn.places
                 console.log(' set info both true')
-                if(newPhone !== phone
-                || newAddress !== address
-                || newEmail !== email
-                || newSite !== site
-                || newCity !== currentCity
-                || newHometown !== hometown) {
+                if( newPhone !== phone
+                    || newAddress !== address
+                    || newEmail !== email
+                    || newSite !== site
+                    || newCity !== currentCity
+                    || newHometown !== hometown) {
 
                     console.log('you can add changes')
                     loggedIn.contact = {phone: newPhone, address: newAddress, email: newEmail, site: newSite}
