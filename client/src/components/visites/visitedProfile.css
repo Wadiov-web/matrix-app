@@ -1,0 +1,144 @@
+.tab1 {
+    display: flex;
+    background-color: #2280fb;
+    width: 70%;
+    margin: auto;
+    position: relative;
+}
+.tab1 img{
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+}
+.tab1 h1{
+    color: white;
+    line-height: 170px;
+}
+.status{
+    margin-right: 10px;
+    margin-left: auto; 
+}
+
+
+
+.statusInfo{
+    display: flex;
+    background-color: #e01afa;
+    padding: 6px;
+    text-align: center;
+    margin-top: 70px;
+    border-radius: 5px;
+    font-size: 17px;
+    border-style: none;
+    outline: none;
+}
+
+
+.sendOff{
+    background-color: #ecb337;
+    padding: 6px;
+    text-align: center;
+    margin-top: 70px;
+    border-radius: 5px;
+    font-size: 17px;
+    border-style: none;
+    outline: none;
+}
+.sendOn{
+    background-color: #866c8a;
+    padding: 6px;
+    text-align: center;
+    margin-top: 70px;
+    border-radius: 5px;
+    font-size: 17px;
+    border-style: none;
+    outline: none;
+}
+.complet{
+    background-color: #866c8a;
+    padding: 6px;
+    text-align: center;
+    margin-top: 70px;
+    border-radius: 5px;
+    font-size: 17px;
+    border-style: none;
+    outline: none;
+}
+
+
+
+.msgDiv{
+    margin-right: 10px;
+}
+
+
+
+.startMsg{
+    background-color: #10ff6c;
+    padding: 6px;
+    text-align: center;
+    margin-top: 70px;
+    border-radius: 5px;
+    font-size: 17px;
+    border-style: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+}
+.msgIcon{
+    width: 20px;
+    height: 20px;
+    /* margin-top: 0px; */
+}
+
+.writeMsg{
+    position: absolute;
+    top: 105px;
+    right: 10px;
+    background-color: #9e9e9e;
+    width: 260px;
+    height: 110px;
+    border-radius: 10px;
+}
+.writeMsgOff {
+    display: none;
+}
+
+.writeMsg form {
+    text-align: center;
+}
+.writeMsg input{
+    height: 30px;
+    width: 200px;
+    border-style: none;
+    font-size: 17px;
+}
+.writeMsg button{
+    padding: 5px 8px;
+    cursor: pointer;
+    outline: none;
+    background-color: #1e90ff;
+    border-radius: 5px;
+    border-style: none;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+}
+#succDiv{
+    height: 30px;
+}
+#success{
+    text-align: center;
+    color: #32ff1f;
+    font-size: 17px;
+    font-weight: bold;
+}
+#closeDiv{
+    width: 40px;
+    background-color: rebeccapurple;
+    padding: 3px;
+    margin-right: 0px;
+    margin-left: auto;
+    cursor: pointer;
+    border-radius: 5px;
+}

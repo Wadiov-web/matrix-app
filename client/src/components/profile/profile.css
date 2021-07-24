@@ -1,0 +1,342 @@
+.tab0 {
+    display: flex;
+    background-color: #2280fb;
+    width: 70%;
+    margin: auto;
+    position: relative;
+}
+.tab0 img{
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+}
+.tab0 h1{
+    color: white;
+    line-height: 170px;
+}
+.status0{
+    margin-right: 10px;
+    margin-left: auto; 
+}
+
+.statusInfo0{
+    display: flex;
+    background-color: #e01afa;
+    padding: 6px;
+    text-align: center;
+    margin-top: 70px;
+    border-radius: 5px;
+    font-size: 17px;
+    border-style: none;
+    outline: none;
+    cursor: pointer;
+}
+.icon{
+    width: 17px;
+    height: 17px;
+}
+.menu{
+    position: absolute;
+    top: 105px;
+    right: 10px;
+    background-color: #d8d8d8;
+    width: 200px;
+    height: 80px;
+    border-radius: 5px;
+}
+.menu li{
+    text-align: center;
+    list-style: none;
+    display: flex;
+    font-size: 18px;
+    margin: 10px 0;
+    padding: 3px 0;
+    padding-left: 10px;
+    cursor: pointer;
+}
+.menu li p {
+    margin-left: 15px;
+}
+.menu li:hover{
+    background-color: #8f8f8f;
+    border-radius: 3px;
+}
+
+.sidesContainer{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    background-color: rgb(163, 163, 163);
+}
+
+
+
+
+
+
+
+/* SIDE 1 COMPONENT */
+
+.side1{
+    width: 30%;
+    
+    background-color: #225268;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+}
+.friendsNumber{
+    margin-top: 10px;
+    text-align: center;
+    background-color: #54f09d;
+    border-radius: 30px;
+    padding: 3px 10px;
+}
+.friendsNumber h1{
+    font-size: 40px;
+}
+.userText{
+    margin: 20px 10px;
+}
+#aboutMe{
+    margin-bottom: 10px;
+    font-size: 25px;
+    text-align: center;
+}
+.parag{
+    background-color: rebeccapurple;
+    padding: 8px;
+}
+.parag p{
+    font-size: 18px;
+}
+.edit button{
+    margin-top: 3px;
+    float: right;
+    font-size: 18px;
+    padding: 5px 6px;
+    background-color: #2adba0;
+    border-style: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.save textarea{
+    width:100%;
+    height: 200px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #3d61ff;
+}
+.save button{
+    float: right;
+    font-size: 18px;
+    padding: 5px 6px;
+    background-color: #2adba0;
+    border-style: none;
+    outline: none;
+    cursor: pointer;
+    margin-left: 3px;
+}
+
+
+
+
+
+
+
+/* SIDE 2 COMPONENT */
+
+
+.side2{
+    width: 70%;
+    /* height: 300px; */
+    background-color: #30b878;
+}
+.side2menu{
+    display: flex;
+    margin: 10px 20px;
+}
+.side2menu li {
+    display: flex;
+    padding: 0 10px;
+    list-style: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+.side2menu li p{
+    margin-left: 3px;
+}
+.active{
+    color: #d82ccf;
+}
+
+.side2menu li:hover {
+    color: #2a46eb;
+}
+
+/* INFOS */
+
+.infos{
+    padding-top: 30px;
+    margin: auto;
+    width: 90%;
+    text-align: center;
+    background-color: rebeccapurple;
+}
+.accountInf, .contactInf, .placesInf, .basicInf{
+    border-bottom: 1px solid #5563e0;
+    padding: 10px 0;
+}
+.infos h3{
+    font-size: 25px;
+    color: #e7e7e7;
+}
+.flexit {
+    display: flex;
+    justify-content: center;
+}
+.flexit p{
+    margin: 10px 10px;
+}
+#bold{
+    font-weight: bold;
+}
+.infIcon{
+    margin: 10px 0px;
+}
+
+
+
+
+/* Friends */
+
+.frTitle{
+    
+    text-align: center;
+}
+.fiendWrap{
+    padding-top: 15px;
+    background-color: rgb(62, 175, 219);
+    height: 400px;
+    width: 60%;
+    margin: auto;
+}
+.friendTab{
+    position: relative;
+    display: flex;
+    background-color: rgb(188, 62, 219);
+    margin-bottom: 3px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.friendTab:hover{
+    background-color: #4eff65;
+}
+.friendTab img{
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+}
+.friendTab p{
+    font-size: 18px;
+    line-height: 60px;
+}
+#iconDel{
+    margin: 23px 0;
+    margin-right: 10px;
+    margin-left: auto;
+}
+#iconDel:hover{
+    color: #ff2600;
+}
+
+
+/* MY ACCOUNT */
+
+#backBtn {
+    font-size: 18px;
+    padding: 4px 10px;
+    border-style: none;
+    outline: none;
+    background-color: #00e1ff;
+    cursor: pointer;
+}
+
+.myAccount{
+    width: 85%;
+    margin: auto;
+    background-color: #aaaa3b;
+}
+
+.setMenu{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+.setMenu li{
+    font-size: 18px;
+    margin: 10px 10px;
+    list-style: none;
+}
+.setMenu li p{
+    cursor: pointer;
+}
+.setMenu li p:hover{
+    color: #5215e0;
+}
+
+/* SET INFOS */
+.setInfos{
+    text-align: center;
+}
+
+.flexit input{
+    width: 300px;
+    height: 30px;
+    border-style: none;
+    outline-color: #19c719;
+    margin: 5px;
+}
+.setInfos h3{
+    margin-bottom: 10px;
+}
+.setInfos button{
+    font-size: 18px;
+    padding: 3px 10px;
+    border-style: none;
+    outline: none;
+    background-color: #2fe22f;
+    cursor: pointer;
+}
+
+/* Security */
+
+#securityBtn {
+    font-size: 18px;
+    padding: 3px 10px;
+    border-style: none;
+    outline: none;
+    background-color: #00e1ff;
+    cursor: pointer;
+}
+
+.accountInf h3{
+    text-align: center;
+}
+
+/* Remove Acount */
+.removeWrap{
+    margin: 20px 0;
+    text-align: center;
+    background-color: green;
+}
+.warn{
+
+    margin: 15px auto;
+    width: 300px;
+}

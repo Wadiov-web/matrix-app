@@ -1,0 +1,96 @@
+/* .notifOff{
+    position: absolute;
+    width: 500px;
+    height: 400px;
+    background-color: #e7e7e7;
+    margin:0 40%;
+    top: 110px;
+    border-radius: 10px;
+    overflow-y: scroll;
+    display: none;
+}
+.notifOn{
+    position: absolute;
+    width: 500px;
+    height: 400px;
+    background-color: #e7e7e7;
+    margin:0 40%;
+    top: 110px;
+    border-radius: 10px;
+    overflow-y: scroll;
+    display: none;
+} */
+
+.container{
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    /* background-color: rebeccapurple; */
+}
+.title{
+    color: white;
+    text-align: center;
+    margin: 5px 0;
+}
+
+.invitation{
+    position: relative;
+    display: flex;
+    background-color: #b6b6b6;
+    border-radius: 5px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+#image{
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+}
+
+#invitName{
+   font-weight: bold;
+}
+
+#info {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.btns {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+}
+.btns button{
+    font-size: 17px;
+    outline: none;
+    border-style: none;
+    cursor: pointer;
+    padding: 5px 6px;
+    margin-left: 5px;
+    background-color: #1e90ff;
+    color: white;
+    border-radius: 5px;
+}
+.btns button:hover{
+    background-color: #0080ff;
+}
+#deny{
+    font-size: 17px;
+    outline: none;
+    border-style: none;
+    cursor: pointer;
+    padding: 5px 6px;
+    margin-left: 5px;
+    background-color: #ff1e56;
+    color: white;
+    border-radius: 5px;
+}
+.btns #deny:hover{
+    background-color: #ff0040;
+}
+
+.invitation:hover{
+    background-color: #d4d4d4;
+}

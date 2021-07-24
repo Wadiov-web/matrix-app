@@ -1,0 +1,29 @@
+.nav{
+    width: 60%;
+    height: 40px;
+   /* background-color: darkturquoise;*/
+    margin: 0 auto;
+}
+
+.nav ul{
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+}
+.nav ul li{
+    line-height: 40px;
+    font-weight: bold;
+    list-style: none;
+    cursor: pointer;
+    color: #d1d1d1;
+}
+.nav ul li:hover{
+   color: #9effea;
+}
+
+
+.alert {
+    background-color: #f10000;
+}
+
+

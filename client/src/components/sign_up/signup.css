@@ -1,0 +1,29 @@
+
+.wrapper{
+    text-align: center;
+}
+
+#error{
+    color: red;
+}
+
+
+.form input{
+    width: 280px;
+    height: 25px;
+    border: none;
+    margin-bottom: 5px;
+    background-color: white;
+}
+.form button{
+    width: 280px;
+    height: 25px;
+    border: none;
+    background-color: #12d300;
+    font-size: 17px;
+    cursor: pointer;
+    border-radius: 15px;
+} 
+.form button:hover{
+    background-color: #15ff00;
+} 
