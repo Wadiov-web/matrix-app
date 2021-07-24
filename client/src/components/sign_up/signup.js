@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import './signup.css';
+import axios from 'axios'
 
 
 class Signup extends Component{
@@ -22,16 +23,33 @@ class Signup extends Component{
 
     submitForm = (e) => {
         e.preventDefault();
-    
+        const { birthday, gender, image, username, email, password } = this.state
         let fd = new FormData()
-        console.log(this.state)
+        fd.append('birthday', birthday)
+        fd.append('gender', gender)
+        fd.append('username', username)
+        fd.append('email', email)
+        fd.append('password', password)
+        fd.append('image', image)
 
+        axios.post('/signup', fd)
+        .then(res => {
+
+            this.setState({error: res.data.msg})
+            setTimeout(() => this.setState({error: ''}), 3000)
+
+            if(res.data.msg == 'user added to database successfully'){
+                this.props.props.history.push('/signin')
+            }
+        }).catch(err => console.log(err))
 
         this.setState({username: '', email: '', password: ''});
     }
 
     inputHandler = (e) => this.setState({[e.target.name]: e.target.value});
-    selectFile = (e) => this.setState( {image: e.target.files[0]} )
+    selectFile = (e) => {
+        this.setState( {image: e.target.files[0]} )
+    }
 
        
 
@@ -47,13 +65,12 @@ class Signup extends Component{
                     <input 
                         name="username"
                         type="file"
-                        value={this.state.image}
                         onChange={this.selectFile}
                     ></input><br></br>
 
                     <label>birthday</label><br></br>
                     <input 
-                        name="username"
+                        name="birthday"
                         type="text"
                         value={this.state.birthday}
                         onChange={this.inputHandler}
@@ -61,7 +78,7 @@ class Signup extends Component{
 
                     <label>gender</label><br></br>
                     <input 
-                        name="username"
+                        name="gender"
                         type="text"
                         value={this.state.gender}
                         onChange={this.inputHandler}

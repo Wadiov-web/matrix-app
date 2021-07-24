@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../model/user')
-//const PreviousRecords = require('../model/previousRecords')
+const PreviousRecords = require('../model/previousRecords')
 const path = require('path')
 
 const suggestedUsers = require('./suggestedUsers')

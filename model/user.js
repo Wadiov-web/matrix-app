@@ -100,14 +100,24 @@ const myUser = new mongoose.Schema({
     
     requestIsSent: [sent],
 
-    conversationFriends: [{id: {type: String}}]
+    conversationFriends: [{id: {type: String}}],
+
+    birthday: { type: String },
+    gender: { type: String },
 
 
-    // userInfo: {
-    //     currentJob: {type: String},
-    //     address: {type: String},
-    //     hobbies: {type: String}
-    // }
+    contact: {
+		phone : {type: String},
+		address : {type: String},
+		email : {type: String},
+		site : {type: String}
+	},
+	places: {
+		currentCity : {type: String},
+		hometown : {type: String}
+	},
+	aboutMe : {type: String}
+
 })
 /*
 const invit = new mongoose.Schema({
