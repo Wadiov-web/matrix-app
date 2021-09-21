@@ -4,7 +4,6 @@ const User = require('../model/user')
 
 //---------------------------------------------- Getting Invitations -------------------------------------------------------------------------------
 
-
 router.get('/api/get-invitations', (req, res) => {
    
     User.findOne({_id: req.session.userID})
@@ -16,7 +15,6 @@ router.get('/api/get-invitations', (req, res) => {
             res.status(204).json({message: 'No invitations were found'})
         }
         
-        
     }).catch(err => console.log(err)) 
 })
 
@@ -24,7 +22,6 @@ router.get('/api/get-invitations', (req, res) => {
 
 router.post('/api/deny-invitations', (req, res) => {
    
-console.log(req.body)
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
         
@@ -61,28 +58,15 @@ console.log(req.body)
 router.post('/api/confirm-invitations', (req, res) => {
     
     console.log(req.body)
-    // loggedIn part
+    
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-        // add user to my userFriends[]
-        loggedIn.userFriends.push({friendId: req.body.from, friendName: req.body.invitUsername, news: false})
-        // add to my notifs[]
-        loggedIn.notifs.push({username: req.body.invitUsername, msg: 'you have accepted his invitation request'})
-        // remove inviter from newInvitations[]
-        const f = loggedIn.newInvitations.filter(invit => req.body.from != invit.from)
-        loggedIn.newInvitations = f
-        loggedIn.save()
-        .then(result => {
-            console.log('my part is successfully done ' + result)
-            res.status(200).json({invitations: loggedIn.newInvitations, notifications: loggedIn.notifs})
-        }).catch(err => console.log(err))
-
 
         // Inviter part
         User.findOne({_id: req.body.from})
         .then(inviter => {
             // add me (loggedIn) to inviter's userFriends[]
-            inviter.userFriends.push({friendId: loggedIn._id, friendName: loggedIn.username, news: false})
+            inviter.userFriends.push({friendImage: loggedIn.userImage, friendId: loggedIn._id, friendName: loggedIn.username, news: false})
             // add to inviter's notifs[]
             inviter.notifs.push({username: loggedIn.username, msg: 'has accepted your invitation request'})
             // remove me from inviter's requestIsSent[]
@@ -93,6 +77,20 @@ router.post('/api/confirm-invitations', (req, res) => {
             .then(result => {
                 console.log('inviter part is successfully done ' + result)
             }).catch(err => console.log(err)) 
+
+            // loggedIn part
+            // add user to my userFriends[]
+            loggedIn.userFriends.push({friendImage: inviter.userImage, friendId: req.body.from, friendName: req.body.invitUsername, news: false})
+            // add to my notifs[]
+            loggedIn.notifs.push({username: req.body.invitUsername, msg: 'you have accepted his invitation request'})
+            // remove inviter from newInvitations[]
+            const f = loggedIn.newInvitations.filter(invit => req.body.from != invit.from)
+            loggedIn.newInvitations = f
+            loggedIn.save()
+            .then(result => {
+                console.log('my part is successfully done ' + result)
+                res.status(200).json({invitations: loggedIn.newInvitations, notifications: loggedIn.notifs})
+            }).catch(err => console.log(err))
 
         }).catch(err => console.log(err)) 
 
@@ -111,7 +109,6 @@ router.get('/api/get-notifications', (req, res) => {
         } else {
             res.status(204).json({message: 'No notifications were found'})
         }
-
     }).catch(err => console.log(err)) 
 })
 

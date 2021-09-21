@@ -23,9 +23,7 @@ class Suggested extends Component {
         axios.get('/api/suggested-users')
         .then(users => {
             console.log('suggested users ' + users.data)
-            this.setState(() => (
-                {suggestedUsers: users.data}
-            ))
+            this.setState(() => ( {suggestedUsers: users.data} ))
         }).catch(err => console.log(err)) 
     }
 
@@ -33,16 +31,15 @@ class Suggested extends Component {
         e.preventDefault();
         if(this.state.input !== '') {
             console.log('input = ' + this.state.input)
-            axios.post('/api/search-user',
-            {username: this.state.input})
+            axios.post('/api/search-user', {username: this.state.input})
             .then(res => {
                 // console.log(res);
-                this.setState(() => (
-                    {searchUser: res.data, result: true}
-                ))
+                if(res.status === 200){
+                    this.setState(() => ({searchUser: res.data, result: true}))
+                }
                 //console.log(this.state.searchUser)
                 // this.props.getVisited(res.data.username)
-                this.props.getVisited(res.data)
+                //this.props.getVisited(res.data)
             }).catch(err => console.log(err)) 
         }
     }
@@ -50,9 +47,7 @@ class Suggested extends Component {
     onChange = (e) => {
         this.setState({input: e.target.value})
         if(e.target.value === '') {
-            this.setState(() => (
-                {result: false}
-            ))
+            this.setState(() => ({result: false}))
         }
     }
     
@@ -68,36 +63,35 @@ class Suggested extends Component {
                 <Link to={visitPro}>
                     <div className={this.state.result ? "searchContainer" : "hidden"} >
                         <div className="user">
-                        <img id="proImg" />
+                            <img src={`/uploads/${this.state.searchUser.searchedImage}`} />
                             <p>{this.state.searchUser.username}</p>
                         </div>
                     </div>
                 </Link>
                 
-
                 <div className="suggest">
                     {this.state.suggestedUsers.length > 0 ? this.state.suggestedUsers.map(user => {
-                            return  <div id="user" key={user.id} >
-                                        <div>
-                                            <img src="" /> 
-                                            <p>{user.username}</p>
-                                        </div>
-                                        <button className="inviteOff" onClick={(e) => {
-                                            if(e.target.className == "inviteOff") {
-                                                e.target.className = "inviteOn"
-                                                e.target.innerHTML = "sending..."
-                                                axios.post(`/api/send-invitation/${user.id}`)
-                                                .then(res => {
-                                                    if(res.status == 200){
-                                                        e.target.innerHTML = "sent"
-                                                        e.target.className = "completed"
-                                                    }
-                                                }).catch(err => console.log(err))
-                                            }
-                                        }}> match <FaUserPlus /></button>
-                                    </div>
-                        })
-                    : null}
+                        return  (
+                        <div id="user" key={user.id} >
+                            <div>
+                                <img src={`/uploads/${user.userImage}`} /> 
+                                <p>{user.username}</p>
+                            </div>
+                            <button className="inviteOff" onClick={(e) => {
+                                if(e.target.className == "inviteOff") {
+                                    e.target.className = "inviteOn"
+                                    e.target.innerHTML = "sending..."
+                                    axios.post(`/api/send-invitation/${user.id}`)
+                                    .then(res => {
+                                        if(res.status == 200){
+                                            e.target.innerHTML = "sent"
+                                            e.target.className = "completed"
+                                        }
+                                    }).catch(err => console.log(err))
+                                }
+                            }}> match <FaUserPlus /></button>
+                        </div>)
+                    }) : null}
                 </div>
             </div>
         )

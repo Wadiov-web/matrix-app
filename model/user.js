@@ -17,6 +17,9 @@ const convs = new mongoose.Schema({
 
 
 const userFriends = new mongoose.Schema({
+    friendImage: {
+        type: String
+    },
     friendId: {
         type: String
     },
@@ -36,6 +39,9 @@ const invit = new mongoose.Schema({
         type: String
     },
     username: {
+        type: String
+    },
+    inviterImage: {
         type: String
     },
     date: {
@@ -67,8 +73,6 @@ const sent = new mongoose.Schema({
         type: String
     }
 })
-
-
 
 // ---------------------------------------- Root Schema -----------------------------------
 
@@ -119,36 +123,6 @@ const myUser = new mongoose.Schema({
 	aboutMe : {type: String}
 
 })
-/*
-const invit = new mongoose.Schema({
-    from: {
-        type: String
-    },
-    date: {
-        default: Date.now
-    }
-})
-const accept = new mongoose.Schema({
-    by: {
-        type: String
-    },
-    date: {
-        default: Date.now
-    }
- }) 
- const handleReq = new mongoose.Schema({
-    username: {
-        type: String
-    },
-    msg: {
-        type: String
-    },
-    date: {
-        default: Date.now
-    }
- })
- 
- */
 
 
 

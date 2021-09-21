@@ -34,7 +34,7 @@ class Signup extends Component{
 
         axios.post('/signup', fd)
         .then(res => {
-
+            console.log(res)
             this.setState({error: res.data.msg})
             setTimeout(() => this.setState({error: ''}), 3000)
 
@@ -47,9 +47,7 @@ class Signup extends Component{
     }
 
     inputHandler = (e) => this.setState({[e.target.name]: e.target.value});
-    selectFile = (e) => {
-        this.setState( {image: e.target.files[0]} )
-    }
+    selectFile = (e) => { this.setState( {image: e.target.files[0]} )}
 
        
 
@@ -63,7 +61,7 @@ class Signup extends Component{
 
                     <label>image</label><br></br>
                     <input 
-                        name="username"
+                        name="image"
                         type="file"
                         onChange={this.selectFile}
                     ></input><br></br>

@@ -1,18 +1,25 @@
 import { React, Component} from 'react'
-import '../profile.css'
+import '../profile/profile.css'
 import { FaBirthdayCake, FaEnvelope, FaGlobeAmericas, FaMale, FaMapMarked, FaMapMarkerAlt, FaPhoneAlt, FaMapMarker, FaFemale } from 'react-icons/fa'
 import axios from 'axios'
 
-class Infos extends Component{
-    state = {
-        basics: {},
-        contact: {},
-        places: {}
+class VisitedInfos extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            basics: {},
+            contact: {},
+            places: {}
+        }
     }
 
     componentDidMount(){
-        axios.get('/api/get-infos')
+
+        console.log('this.props.visitedId')
+        console.log(this.props.visitedId)
+        axios.get(`/api/get-visited-infos/${this.props.visitedId}`)
         .then(res => {
+            console.log(res)
             this.setState(() => (
                 {basics: res.data.basics, contact: res.data.contact, places: res.data.places}
             ))
@@ -22,19 +29,7 @@ class Infos extends Component{
     render() {
        
         return (
-            
             <div className="infos">
-            
-                <div className="accountInf">
-                    <h3>Account</h3>
-                    <div class="flexit">
-                        <FaEnvelope className="infIcon" />
-                        <p id="bold">Email-address:</p>
-                        <p>{this.state.basics.email}</p>
-                    </div>
-                </div>
-
-
 
                 {this.state.contact ?
                     <div className="contactInf">
@@ -87,14 +82,7 @@ class Infos extends Component{
                         <FaMale className="infIcon"/>
                         <FaFemale className="infIcon"/>
                         <p id="bold">Gender:</p>
-                        
                         <p>{this.state.basics.gender}</p>
-                    </div>
-                    <div class="flexit">
-                        
-                        <p id="bold">Date:</p>
-                        
-                        <p>{this.state.basics.accountDate}</p>
                     </div>
                 </div>
 
@@ -104,4 +92,4 @@ class Infos extends Component{
     }
 }
 
-export default Infos
+export default VisitedInfos

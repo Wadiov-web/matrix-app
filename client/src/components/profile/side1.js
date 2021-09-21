@@ -1,18 +1,35 @@
 import { React, Component} from 'react'
 import './profile.css'
+import axios from 'axios'
 
 
 class Side1 extends Component{
     state = {
         aboutMe: '',
+        input: '',
+        friendsCount: '',
         edit: false
     }
+
     componentDidMount() {
-        // get about me info
+        axios.get('/api/get-aboutMe')
+        .then(res => {
+            console.log(res)
+            this.setState({aboutMe: res.data.aboutMe, input: res.data.aboutMe, friendsCount: res.data.friendsCount})
+        }).catch(err => console.log(err))
     }
-    aboutMe = () => {
-        
+
+    onChange = (e) => { this.setState({input: e.target.value})}
+    save = () => {
+        console.log(this.state.input)
+
+        axios.post('/api/update-aboutMe', {aboutMe: this.state.input})
+        .then(res => {
+            console.log(res)
+            this.setState({aboutMe: res.data.aboutMe, input: res.data.aboutMe})
+        }).catch(err => console.log(err))
     }
+
 
 
     edit = () => { this.setState(() => ({edit: !this.state.edit})) }
@@ -22,7 +39,7 @@ class Side1 extends Component{
         return (
             <div className="side1">
                 <div className="friendsNumber">
-                    <h1>22</h1>
+                    <h1>{this.state.friendsCount}</h1>
                     <p>Friends</p>
                 </div>
                 <div className="userText">
@@ -31,26 +48,30 @@ class Side1 extends Component{
                     {this.state.aboutMe ?
 
                         this.state.edit ?
-                        <div className="save">
-                                <textarea>hello hello hello hello there hello there hello therehello t
-                                </textarea>
-                            <button onClick={this.edit}>Save</button>
-                            <button onClick={this.edit}>cancel</button>
-                        </div>
-                        :
-                        <div className="edit">
-                            <div className="parag">
-                                <p>hello hello hello hello there hello there hello therehello there </p>
+                            <div className="save">
+                                <textarea value={this.state.input} onChange={this.onChange} ></textarea>
+                                <button onClick={() => {
+                                    this.edit()
+                                    this.save()
+                                    }}>Save</button>
+                                <button onClick={() => {
+                                    this.setState({input: this.state.aboutMe})
+                                    this.edit()
+                                }}>cancel</button>
                             </div>
-                            <button onClick={this.edit}>Edit</button>
-                        </div>
+                        :
+                            <div className="edit">
+                                <div className="parag">
+                                    <p>{this.state.aboutMe}</p>
+                                </div>
+                                <button onClick={this.edit}>Edit</button>
+                            </div>
                     :
-                    <div className="save">
-                        <h1>Write what's in your mind</h1>
-                            <textarea>
-                            </textarea>
-                        <button onClick={this.aboutMe}>Save</button>
-                    </div>
+                        <div className="save">
+                            <h1>Write what's in your mind</h1>
+                            <textarea value={this.state.input} onChange={this.onChange} ></textarea>
+                            <button onClick={this.save}>Save</button>
+                        </div>
                     }
 
                 </div>

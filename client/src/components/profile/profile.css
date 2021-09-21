@@ -340,3 +340,47 @@
     margin: 15px auto;
     width: 300px;
 }
+
+
+
+
+
+
+
+
+
+
+/* POP UP MODAL */
+
+.viewModal {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(95, 95, 95, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.viewModal img {
+    max-width: 75%;
+    max-height: 80vh;
+}
+
+.updateModal {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(95, 95, 95, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.updateDiv {
+    background-color: rgb(155, 155, 155);
+}

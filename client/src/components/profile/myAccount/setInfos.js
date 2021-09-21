@@ -16,7 +16,7 @@ class SetInfos extends Component {
         newCity: '',
         newHometown: ''
     }
-    
+
     componentDidMount() {
         axios.get('/api/get-infos')
         .then(res => {
@@ -25,7 +25,7 @@ class SetInfos extends Component {
                 newAddress: res.data.contact.address,
                 newEmail: res.data.contact.email,
                 newSite: res.data.contact.site,
-                newCity: res.data.places.currnetCity,
+                newCity: res.data.places.currentCity,
                 newHometown: res.data.places.hometown}
             ))
         }).catch(err => console.log(err))
@@ -42,7 +42,7 @@ class SetInfos extends Component {
                 newAddress: res.data.contact.address,
                 newEmail: res.data.contact.email,
                 newSite: res.data.contact.site,
-                newCity: res.data.places.currnetCity,
+                newCity: res.data.places.currentCity,
                 newHometown: res.data.places.hometown}
             ))
         }).catch(err => console.log(err))
@@ -80,22 +80,22 @@ class SetInfos extends Component {
                             <div class="flexit">
                                 <FaPhoneAlt className="infIcon"/>
                                 <p id="bold">Phone:</p>
-                                <input name="phone" type="text" value={this.state.newPhone} onChange={this.onChange} />
+                                <input name="newPhone" type="text" value={this.state.newPhone} onChange={this.onChange} />
                             </div>
                             <div class="flexit">
                                 <FaMapMarked className="infIcon"/>
                                 <p id="bold">Address:</p>
-                                <input name="address" type="text" value={this.state.newAddress} onChange={this.onChange} />
+                                <input name="newAddress" type="text" value={this.state.newAddress} onChange={this.onChange} />
                             </div>
                             <div class="flexit">
                                 <FaEnvelope className="infIcon"/>
                                 <p id="bold">Email:</p>
-                                <input name="email" type="text" value={this.state.newAddress} onChange={this.onChange} />
+                                <input name="newEmail" type="text" value={this.state.newEmail} onChange={this.onChange} />
                             </div>
                             <div class="flexit">
                                 <FaGlobeAmericas className="infIcon"/>
                                 <p id="bold">Site:</p>
-                                <input name="site" type="text" value={this.state.newSite} onChange={this.onChange} />
+                                <input name="newSite" type="text" value={this.state.newSite} onChange={this.onChange} />
                             </div>
                         </div>
 
@@ -104,12 +104,12 @@ class SetInfos extends Component {
                             <div class="flexit">
                                 <FaMapMarker className="infIcon"/>
                                 <p id="bold">Current City:</p>
-                                <input name="city" type="text" value={this.state.newCity} onChange={this.onChange} />
+                                <input name="newCity" type="text" value={this.state.newCity} onChange={this.onChange} />
                             </div>
                             <div class="flexit">
                                 <FaMapMarkerAlt className="infIcon"/>
                                 <p id="bold">Hometown:</p>
-                                <input name="hometown" type="text" value={this.state.newHometown} onChange={this.onChange} />
+                                <input name="newHometown" type="text" value={this.state.newHometown} onChange={this.onChange} />
                             </div>
                         </div>
                         <button type="submit">save changes</button>

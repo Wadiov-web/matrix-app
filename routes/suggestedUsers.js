@@ -29,7 +29,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                     if (user._id == loggedIn._id.toString()) {
                        return null
                     } else {
-                        return allUsers.push({id: user._id, username: user.username})
+                        return allUsers.push({id: user._id, username: user.username, userImage: user.userImage})
                     }
                 })
                 res.status(200).json(allUsers)
@@ -50,7 +50,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                 loggedIn.newInvitations.forEach(invit => {
                     f1 = f1.filter(user => user._id != invit.from)
                 })
-                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username}))
+                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username, userImage: elmt.userImage}))
 
                 res.status(200).json(allUsers)
                 console.log('3 are full')
@@ -67,7 +67,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                 loggedIn.userFriends.forEach(friend => {
                     f1 = f1.filter(user => user._id != friend.friendId)
                 })
-                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username}))
+                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username, userImage: elmt.userImage}))
 
                 res.status(200).json(allUsers)
                 console.log('Friends && RequestIsSent are full')
@@ -84,7 +84,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                 loggedIn.newInvitations.forEach(invit => {
                     f1 = f1.filter(user => user._id != invit.from)
                 })
-                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username}))
+                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username, userImage: elmt.userImage}))
 
                 console.log('Friends && NewInvitations are full')
                 console.log(allUsers)
@@ -101,7 +101,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                 loggedIn.newInvitations.forEach(invit => {
                     f1 = f1.filter(user => user._id != invit.from)
                 })
-                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username}))
+                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username, userImage: elmt.userImage}))
 
                 res.status(200).json(allUsers)
                 console.log('NewInvitations && RequestIsSent are full')
@@ -115,7 +115,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                 loggedIn.userFriends.forEach(friend => {
                     f1 = f1.filter(user => user._id != friend.friendId)
                 })
-                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username}))
+                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username, userImage: elmt.userImage}))
 
                 res.status(200).json(allUsers)
                 console.log('userFriends is full')
@@ -129,7 +129,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                 loggedIn.requestIsSent.forEach(invit => {
                     f1 = f1.filter(user => user._id != invit.userId)
                 })
-                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username}))
+                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username, userImage: elmt.userImage}))
 
                 res.status(200).json(allUsers)
                 console.log('requestIsSent is full')
@@ -143,7 +143,7 @@ router.get('/api/suggested-users', isAuth, (req, res) => {
                 loggedIn.newInvitations.forEach(invit => {
                     f1 = f1.filter(user => user._id != invit.from)
                 })
-                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username}))
+                f1.forEach(elmt => allUsers.push({id: elmt._id, username: elmt.username, userImage: elmt.userImage}))
                 
                 res.status(200).json(allUsers)
                 console.log('newInvitations is full')
@@ -175,14 +175,10 @@ router.post('/api/send-invitation/:id', isAuth, (req, res) => {
                     loggedIn.requestIsSent.push({username: receiver.username, userId: receiverId})
                     loggedIn.save()
     
-                    receiver.newInvitations.push({from: loggedIn._id, username: loggedIn.username})
+                    receiver.newInvitations.push({inviterImage: loggedIn.userImage, from: loggedIn._id, username: loggedIn.username})
                     receiver.save()
                     .then(result => {
-
                         res.status(200).json({msg: 'invitation is sent'})
-                        console.log(result)
-                        // socket.broadcast.emit('newInvit', 'someone is DJ')
-
                     }).catch(err => {
                         res.status(500).json({msg: 'server error'})
                         console.log(err)
@@ -192,9 +188,6 @@ router.post('/api/send-invitation/:id', isAuth, (req, res) => {
                 }
             
             }).catch(err => console.log(err))
-
-            
-
         }).catch(err => {
             console.log(err)
             res.status(500).json({msg: 'server error'})
@@ -206,45 +199,38 @@ router.post('/api/send-invitation/:id', isAuth, (req, res) => {
 
 router.post('/api/search-user', isAuth, (req, res) => {
     
-
-
     User.findOne({_id: req.session.userID})
         .then(loggedIn => {
-
             User.findOne({username: req.body.username})
             .then(searchedOne => {
                 if (searchedOne.username !== loggedIn.username) {
                     let found = false
-
                     if (found === false) {
                         loggedIn.requestIsSent.forEach(request => {
                             if(request.username === searchedOne.username) {
-                                res.status(200).json({searchedId: searchedOne._id, username: searchedOne.username, status: 'requestIsSent'})
+                                res.status(200).json({searchedImage: searchedOne.userImage, searchedId: searchedOne._id, username: searchedOne.username, status: 'requestIsSent'})
                                 found = true
                             }
                         })
                     }
-
                     if (found === false) {
                         loggedIn.newInvitations.forEach(invit => {
                             if(invit.username === searchedOne.username) {
-                                res.status(200).json({searchedId: searchedOne._id, username: searchedOne.username, status: 'newInvitations'})
+                                res.status(200).json({searchedImage: searchedOne.userImage, searchedId: searchedOne._id, username: searchedOne.username, status: 'newInvitations'})
                                 found = true
                             }
                         })
                     }
-
                     if (found === false) {
                         loggedIn.userFriends.forEach(friend => {
                             if(friend.friendName === searchedOne.username) {
-                                res.status(200).json({searchedId: searchedOne._id, username: searchedOne.username, status: 'userFriends'})
+                                res.status(200).json({searchedImage: searchedOne.userImage, searchedId: searchedOne._id, username: searchedOne.username, status: 'userFriends'})
                                 found = true
                             }
                         })
                     }
-
                     if(found === false) {
-                        res.status(200).json({searchedId: searchedOne._id, username: searchedOne.username, status: 'suggested'})
+                        res.status(200).json({searchedImage: searchedOne.userImage, searchedId: searchedOne._id, username: searchedOne.username, status: 'suggested'})
                     }
                 }
 
@@ -252,17 +238,10 @@ router.post('/api/search-user', isAuth, (req, res) => {
             console.log(err)
             res.status(404).json({msg: 'user not found'})
         })
-
-
-
-
-
-
-
-        }).catch(err => {
-            console.log(err)
-            res.status(500).json({msg: 'server error'})
-        })
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json({msg: 'server error'})
+    })
 })
 
 

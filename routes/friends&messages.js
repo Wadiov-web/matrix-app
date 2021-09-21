@@ -65,7 +65,7 @@ webSocket.on('connection', (socket) => {
                 webSocket.to(user.sid).emit('newMsg', packet)
                 // And save msg to database
 
-                 // save Msg to me
+                // save Msg to me
                 User.findOne({_id: loggedInId})
                 .then(loggedIn => {
                     
@@ -98,22 +98,20 @@ webSocket.on('connection', (socket) => {
             User.findOne({_id: loggedInId})
             .then(loggedIn => {
 
-            console.log('loggedIn')
-            console.log(loggedInId)
-            console.log(loggedIn)
+                console.log('loggedIn')
+                console.log(loggedInId)
+                console.log(loggedIn)
                 
                 const exactFriend = loggedIn.userFriends.filter(friend => friend.friendId == packet.to)[0]
-                exactFriend.conversations.push({
-                    me: packet.msg
-                })
+                exactFriend.conversations.push({me: packet.msg})
                 loggedIn.save()
             }).catch(err => console.log(err)) 
 
             // save Msg to him
             User.findOne({_id: packet.to})
             .then(recepient => {
-            console.log('recepient')
-            console.log(recepient)
+                console.log('recepient')
+                console.log(recepient)
                 const exactFriend = recepient.userFriends.filter(friend => friend.friendId == loggedInId)[0]
                 exactFriend.news = true
                 exactFriend.conversations.push({
@@ -130,16 +128,14 @@ webSocket.on('connection', (socket) => {
 //--------------------------------------------------- GET FRIENDS ----------------------------------------------------------------
 
 router.get('/api/get-friends', (req, res) => {
-   
+    
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-
-
 
         if (loggedIn.userFriends.length > 0 && loggedIn.conversationFriends.length > 0) {
             let f = []
             loggedIn.conversationFriends.forEach(user => {
-                let found = loggedIn.userFriends.filter(friend => friend.friendId == user.id)[0]
+                let found = loggedIn.userFriends.find(friend => friend.friendId == user.id)
                 f.push(found)
             })
 
@@ -149,6 +145,7 @@ router.get('/api/get-friends', (req, res) => {
                 users.forEach((user2) => {
                     if(user.friendId == user2.userId){
                         onUsers.push({
+                            friendImage: user.friendImage,
                             friendName: user.friendName,
                             friendId: user.friendId,
                             news: user.news,
@@ -159,6 +156,7 @@ router.get('/api/get-friends', (req, res) => {
                 })
                 if (!found) {
                     onUsers.push({
+                        friendImage: user.friendImage,
                         friendName: user.friendName,
                         friendId: user.friendId,
                         news: user.news,
@@ -206,14 +204,18 @@ router.post('/api/add-news', (req, res) => {
     const id = req.body.friendId
     console.log('Add News')
     User.findOne({_id: req.session.userID})
-        .then(loggedIn => {
-    
-            const exactFriend = loggedIn.userFriends.filter(friend => friend.friendId == id)[0]
-            if (exactFriend.news === false) {
-                exactFriend.news = true
-            }
-            loggedIn.save()
-        }).catch(err => console.log(err)) 
+    .then(loggedIn => {
+
+        console.log(id)
+        const exactFriend = loggedIn.userFriends.filter(friend => friend.friendId == id)[0]
+        console.log('222ww')
+        if (exactFriend.news === false) {
+            console.log('222ww')
+            exactFriend.news = true
+            loggedIn.save().then(result => console.log(result))
+        }
+        
+    }).catch(err => console.log(err)) 
 })
 
 // ---------------------------------------- Logout user ----------------------------------------------------------------------

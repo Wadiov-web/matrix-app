@@ -8,20 +8,6 @@ const bcrypt = require('bcrypt')
 
 
 
-//------------------------------ UPDATE USERNAME ----------------------------------------
-
-router.post('/api/update-username', (req, res) => {
-   
-    User.findOne({_id: req.session.userID})
-    .then(loggedIn => {
-        
-        // chech for password compatibility...
-        // if true update username
-        // if false res.json({result:'password incorrect'})
-
-        
-    }).catch(err => console.log(err)) 
-})
 
 //------------------------------ GET INFOS ----------------------------------------
 router.get('/api/get-infos', (req, res) => {
@@ -30,7 +16,7 @@ router.get('/api/get-infos', (req, res) => {
     .then(loggedIn => {
         
         let contact = {phone: '', address: '', email: '', site: ''}
-        let places = {currentCity: '', homeTown: ''}
+        let places = {currentCity: '', hometown: ''}
 
         let basics = {
             username: loggedIn.username,
@@ -61,56 +47,56 @@ router.post('/api/update-infos', (req, res) => {
    
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-            const {newPhone, newAddress, newEmail, newSite, newCity, newHometown} = req.body
-            let shouldSave = false
+        const {newPhone, newAddress, newEmail, newSite, newCity, newHometown} = req.body
+        let shouldSave = false
+        console.log(req.body)
+        if(loggedIn.contact !== undefined && loggedIn.places !== undefined) {
+            const {phone, address, email, site} = loggedIn.contact
+            const {currentCity, hometown} = loggedIn.places
+            console.log(' set info both true')
+            if( newPhone !== phone
+                || newAddress !== address
+                || newEmail !== email
+                || newSite !== site
+                || newCity !== currentCity
+                || newHometown !== hometown) {
 
-            if(loggedIn.contact !== undefined && loggedIn.places !== undefined)  {
-                const {phone, address, email, site} = loggedIn.contact
-                const {currentCity, hometown} = loggedIn.places
-                console.log(' set info both true')
-                if( newPhone !== phone
-                    || newAddress !== address
-                    || newEmail !== email
-                    || newSite !== site
-                    || newCity !== currentCity
-                    || newHometown !== hometown) {
-
-                    console.log('you can add changes')
-                    loggedIn.contact = {phone: newPhone, address: newAddress, email: newEmail, site: newSite}
-                    loggedIn.places = {currentCity: newCity, hometown: newHometown}
-                    shouldSave = true
-                } else {
-                    console.log('you can noooot add changes')
-                }
-
-            } else {
-                console.log(' set Info both false')
+                console.log('you can add changes')
                 loggedIn.contact = {phone: newPhone, address: newAddress, email: newEmail, site: newSite}
                 loggedIn.places = {currentCity: newCity, hometown: newHometown}
                 shouldSave = true
+            } else {
+                console.log('data is the same')
             }
 
-            if(shouldSave) {
-                loggedIn.save()
-                .then(result => {
-                    res.status(200).json({contact: result.contact, places: result.places})
-                }).catch(err => {
-                    console.log(err)
-                    res.status(500).json(err)
-                }) 
-            }
-        
+        } else {
+            console.log(' set Info both false')
+            loggedIn.contact = {phone: newPhone, address: newAddress, email: newEmail, site: newSite}
+            loggedIn.places = {currentCity: newCity, hometown: newHometown}
+            shouldSave = true
+        }
+
+        if(shouldSave) {
+            loggedIn.save()
+            .then(result => {
+                res.status(200).json({contact: result.contact, places: result.places})
+            }).catch(err => {
+                console.log(err)
+                res.status(500).json(err)
+            }) 
+        }
+    
     }).catch(err => console.log(err)) 
 })
 
-//------------------------------ GET FRIEND COUNT----------------------------------------
+//------------------------------ GET PROFILE BAR ----------------------------------------
 
-router.get('/api/get-friendCount', (req, res) => {
+router.get('/api/get-profile-bar', (req, res) => {
    
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
 
-        res.status(200).json(loggedIn.userFriends.length)
+        res.status(200).json({username: loggedIn.username, imageName: loggedIn.userImage})
     }).catch(err => console.log(err)) 
 })
 
@@ -123,11 +109,11 @@ router.get('/api/get-aboutMe', (req, res) => {
         
         if (loggedIn.aboutMe !== undefined) {
             console.log('there is aboutMe data')
-            res.status(200).json(loggedIn.aboutMe)
+            res.status(200).json({aboutMe: loggedIn.aboutMe, friendsCount: loggedIn.userFriends.length})
         } else {
-            res.status(204).json({msg: 'No aboutMe infos'})
+            res.status(200).json({aboutMe: '', friendsCount: loggedIn.userFriends.length})
         }
-      
+    
     }).catch(err => console.log(err)) 
 })
 
@@ -137,30 +123,34 @@ router.post('/api/update-aboutMe', (req, res) => {
    
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-        
+        let shouldSave = false
         if(loggedIn.aboutMe !== undefined) {
             if(req.body.aboutMe !== loggedIn.aboutMe) {
                 console.log('comparing data')
                 loggedIn.aboutMe = req.body.aboutMe
+                shouldSave = true
             }
         } else {
             console.log('adding directly')
             loggedIn.aboutMe = req.body.aboutMe
+            shouldSave = true
         }
         
-        loggedIn.save()
-        .then(result => {
-            res.status(200).json(result.aboutMe)
-        }).catch(err => {
-            console.log(err)
-            res.status(500).json(err)
-        }) 
+        if(shouldSave){
+            loggedIn.save()
+            .then(result => {
+                res.status(200).json({aboutMe: result.aboutMe})
+            }).catch(err => {
+                console.log(err)
+                res.status(500).json(err)
+            }) 
+        }
     }).catch(err => console.log(err)) 
 })
 
 //------------------------------ GET FRIENDS ----------------------------------------
 
-router.get('/api/get-friends', (req, res) => {
+router.get('/api/get-all-friends', (req, res) => {
    
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
@@ -180,9 +170,6 @@ router.post('/api/delete-friends/:id', (req, res) => {
         loggedIn.userFriends = loggedIn.userFriends.filter(friend => friend.friendId !== deletedId)
         loggedIn.conversationFriends = loggedIn.conversationFriends.filter(convf => convf.id !== deletedId)
         
-
-
-
         User.findOne({_id: deletedId})
         .then(friend => {
 
@@ -197,9 +184,6 @@ router.post('/api/delete-friends/:id', (req, res) => {
                 res.status(500).json(err)
             }) 
         }).catch(err => console.log(err)) 
-
-
-
 
         loggedIn.save()
         .then(result => {

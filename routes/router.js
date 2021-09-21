@@ -8,7 +8,7 @@ const suggestedUsers = require('./suggestedUsers')
 const notifications = require('./notifications')
 const friendsAndMessages = require('./friends&messages')
 const profileApi = require('./profileApi')
-//const visitedUserApi = require('./visitedUserApi')
+const visitedProfileApi = require('./visitedProfileApi')
 
 const multer = require('multer')
 const bcrypt = require('bcrypt')
@@ -16,26 +16,35 @@ const bcrypt = require('bcrypt')
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, __dirname + '/uploads');
+        cb(null, __dirname + '/uploads')
     },
     filename: function(req, file, cb) {
-        cb(null, Date.now() + file.originalname);
+        cb(null, Date.now() + file.originalname)
     }
-});
+})
 
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        cb(null, true)
+    } else {
+        cb(null, false)
+    }
+}
 
-const upload = multer({ storage })
-// const upload = multer({ dest: __dirname + '/uploads' })
-
+const upload = multer({
+    storage,
+    limits: { fileSize: 1024 * 1024 * 5 },
+    fileFilter
+})
+const handleFile =  upload.single('image')
 // ---------------------------------------- Register user -------------------------------------------------------------
 
-router.post('/signup', upload.single('image'), (req, res) => {
+router.post('/signup', handleFile, (req, res) => {
 
-    const {username, email, password, gender, birthday, image} = req.body;
+    const { username, email, password, gender, birthday } = req.body
     console.log('from sign up api')
-    console.log(req.body)
     console.log(req.file)
-        
+
     if(username && email && password && gender && birthday && req.file){
 
         PreviousRecords.findOne({email: email})
@@ -91,8 +100,8 @@ router.post('/signup', upload.single('image'), (req, res) => {
             }
         })
     } else {
-        res.json({msg: 'provide all data please'});
-        console.log('provide all data please')
+        res.json({msg: 'Provide all data or the right data types and size not exceeding 5MB please'});
+        console.log('Provide all data or the right data types please')
     }
 })
 
@@ -164,10 +173,7 @@ router.use(suggestedUsers)
 router.use(notifications)
 router.use(friendsAndMessages)
 router.use(profileApi)
-// router.use(visitedUserApi)
-
-
-
+router.use(visitedProfileApi)
 
 
 
@@ -217,6 +223,25 @@ router.post('/api/start-message', (req, res) => {
 })
 
 
+
+router.post('/api/update-image', handleFile, (req, res) => {
+
+    User.findOne({_id: req.session.userID})
+    .then(loggedIn => {
+        
+        if(req.file){
+            loggedIn.userImage = req.file.filename
+            loggedIn.save()
+            .then(result => {
+                res.status(200).json({msg: 'Image is updated successfully'})
+            }).catch(err => console.log(err))
+
+        } else {
+            res.status(200).json({msg: 'Provide file or the right data types and size not exceeding 5MB please'})
+        }
+
+    }).catch(err => console.log(err))
+})
 
 
 

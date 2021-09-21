@@ -52,7 +52,7 @@ class Notification extends Component {
         this.getNotifications()
         console.log('CDM Notification')
     }
- 
+
     confirm = (invit) => {
         console.log('confirm clicked')
         console.log(invit.username)
@@ -67,14 +67,14 @@ class Notification extends Component {
     
     render(){
         return (
-
+            
             <div className="container">
                 <h1 className="title">My Notifications</h1>
                 <div>
                     {this.state.invits.reverse().map(invit => {
                         return (
                             <div className="invitation">
-                                <img src={Img} id="image" alt=""></img>
+                                <img src={`/uploads/${invit.inviterImage}`} id="image" />
                                 <div id="info">
                                     <p id="invitName">{invit.username}</p>
                                     <p>sends invitation request</p>
@@ -105,13 +105,13 @@ class Notification extends Component {
                 <div>
                     {this.state.notifs.length > 0 ? this.state.notifs.reverse().map(notif => {
                         return (
-                            <div className="invitation">
-                                <div id="info">
-                                    <p id="invitName">{notif.username}</p>
-                                    <p>{notif.msg}</p>
-                                    <p>{notif.date}</p>
-                                </div>
+                        <div className="invitation">
+                            <div id="info">
+                                <p id="invitName">{notif.username}</p>
+                                <p>{notif.msg}</p>
+                                <p>{notif.date}</p>
                             </div>
+                        </div>
                         )
                     }): null}
                 </div>

@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const path = require('path')
+
 
 const app = express()
 
@@ -51,7 +53,12 @@ app.use(session({
     cookie: {
         maxAge: 60 * 1000 * 60 * 24 * 2
     }
-}));
+}))
+
+
+
+app.use('/uploads', express.static(path.join(__dirname, '/routes/uploads')))
+
 
 
 

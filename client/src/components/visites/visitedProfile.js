@@ -4,19 +4,23 @@ import axios from 'axios'
 import {FaUserCheck, FaUserPlus, FaEnvelope} from 'react-icons/fa'
 import {FiArrowUpRight, FiArrowDownLeft} from 'react-icons/fi'
 
+import AboutVisited from './aboutVisited'
+import VisitedInfos from './visitedInfos'
+
+
 
 class Visited extends Component {
     
     state = {
         input: '',
-        visited: {},
+        visited: '',
         isFriend: false,
         form: false,
-        success: ''
-
+        success: '',
+        searchedOne: ''
     }
 
-    getVisitedInfo = () => {
+    getVisitedInfos = () => {
         let path = this.props.location.pathname
         let searchedOne = path.slice(16, path.length)
         axios.post('/api/search-user', {username: searchedOne})
@@ -34,7 +38,8 @@ class Visited extends Component {
 
     componentDidMount() {
         console.log('From visitedProfile.js')
-        this.getVisitedInfo()
+        this.getVisitedInfos()
+        console.log(this.state.visited)
     }
 
     openForm = () => {this.setState(() => ({form: true}))}
@@ -64,7 +69,7 @@ class Visited extends Component {
                         if(this.state.visited.status === 'suggested'){
                             return(
                             <div className="tab1">
-                                <img />
+                                <img src={`/uploads/${this.state.visited.searchedImage}`} />
                                 <h1>{this.state.visited.username}</h1>
                                 <div className="status">
                                     <button className="sendOff" onClick={(e) => {
@@ -88,7 +93,7 @@ class Visited extends Component {
                         if(this.state.visited.status === 'userFriends'){
                             return(
                             <div className="tab1">
-                                <img />
+                                <img src={`/uploads/${this.state.visited.searchedImage}`} />
                                 <h1>{this.state.visited.username}</h1>
                                 <div className="status">
                                     <button className="statusInfo">
@@ -121,7 +126,7 @@ class Visited extends Component {
                         if(this.state.visited.status === 'requestIsSent'){
                             return(
                             <div className="tab1">
-                                <img />
+                                <img src={`/uploads/${this.state.visited.searchedImage}`} />
                                 <h1>{this.state.visited.username}</h1>
                                 <div className="status">
                                 <button className="statusInfo">
@@ -134,7 +139,7 @@ class Visited extends Component {
                         if(this.state.visited.status === 'newInvitations'){
                             return(
                             <div className="tab1">
-                                <img />
+                                <img src={`/uploads/${this.state.visited.searchedImage}`} />
                                 <h1>{this.state.visited.username}</h1>
                                 <div className="status">
                                     <button className="statusInfo">
@@ -145,45 +150,18 @@ class Visited extends Component {
                             </div>)
                         }
                 })()}
+
+                <div className="sidesContainer">
+                    {this.state.visited ?
+                    <React.Fragment>
+                        <AboutVisited visitedId={this.state.visited.searchedId} />
+                        <VisitedInfos visitedId={this.state.visited.searchedId} />
+                    </React.Fragment>
+                    : null}
+                </div>
             </div>
         )
     }
 }
 
 export default Visited
-
-
-
-
-// {this.state.isFriend ?
-//     <div className="tab1">
-//         <img />
-//         <h1>{this.state.visited.username}</h1>
-//         <div className="status">
-//             <p>{this.state.visited.status}</p>
-//         </div>
-//         <div className="startMsg" onClick={() => {this.openForm()}}>
-//             Start Message
-//         </div>
-        
-//         <div className={this.state.form ? "writeMsg" : "writeMsgOff"}>
-//             <p id="closeDiv" onClick={this.closeForm}>close</p>
-//             <div id="succDiv">
-//                 <p id="success">{this.state.success}</p>
-//             </div>
-         
-//             <form onSubmit={this.sendMessage}>
-//                 <input type="text" value={this.state.input} onChange={this.onChange} />
-//                 <button type="submit">send</button>
-//             </form>
-//         </div>
-        
-
-//     </div>
-// :
-// <div className="tab1">
-//     <img />
-//     <h1>{this.state.visited.username}</h1>
-//     <div>{this.state.visited.status}</div>
-// </div>
-// }

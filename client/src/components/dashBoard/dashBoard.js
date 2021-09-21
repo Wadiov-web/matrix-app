@@ -22,12 +22,12 @@ class DashBoard extends Component {
         }
     }
 
-    getVisitedUser = (visitedUser) => {
-        this.setState( {visited: visitedUser} )
-        console.log('getVisitedUser()  DashBoard')
-        console.log(visitedUser)
-        console.log('----------------------')
-    }
+    // getVisitedUser = (visitedUser) => {
+    //     this.setState( {visited: visitedUser} )
+    //     console.log('getVisitedUser()  DashBoard')
+    //     console.log(visitedUser)
+    //     console.log('----------------------')
+    // }
 
     async componentDidMount() {
         const user = await axios.get('/api/user');
@@ -63,7 +63,7 @@ class DashBoard extends Component {
                                 return <Home
                                     socketHome={this.props.socket}
                                     loggedIn={this.state.connectedUser} 
-                                    getVisited={this.getVisitedUser.bind(this)}
+                                    //getVisited={this.getVisitedUser.bind(this)}
                                 />
                             }} />
                             <Route exact path="/dashBoard/notifications" component={Notification} />
