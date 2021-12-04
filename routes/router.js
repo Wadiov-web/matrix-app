@@ -12,7 +12,7 @@ const visitedProfileApi = require('./visitedProfileApi')
 
 const multer = require('multer')
 const bcrypt = require('bcrypt')
-
+const nodemailer = require("nodemailer")
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -82,11 +82,62 @@ router.post('/signup', handleFile, (req, res) => {
                                     password: hash,
                                     gender,
                                     birthday,
-                                    userImage: req.file.filename
+                                    userImage: req.file.filename,
+                                    isActivated: false
                                 })
                                 newUser.save()
-                                .then(result => res.json({msg: 'user added to database successfully'}))
-                                .catch(err => console.log(err))
+                                .then(result => {
+                                    res.json({msg: 'user added to database successfully'})
+                                    // Send activation email
+					
+				    
+/*
+  
+    let transporter = nodemailer.createTransport({
+        host: "mail.google.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+        user: 'hamadaparis123@gmail.com', // generated ethereal user
+        pass: '15987530', // generated ethereal password
+        },
+        rejectUnauthorized: false
+    });
+
+    transporter.sendMail({
+        from: '"Dating App" <hamadaparis123@gmail.com>', // sender address
+        to: result.email, // list of receivers
+        subject: "Account activation", // Subject line
+        text: "Hello world?", // plain text body
+        html: "<b>activate account please</b>", // html body
+    }, (err, info) => {
+        if(err) {
+            console.log(err)
+        }
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+      
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+      
+    })
+    
+    
+    .then(info => {
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+      
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+      
+    }).catch(err => console.log(err))*/
+
+  
+
+				    
+                                }).catch(err => console.log(err))
                                 
                                 const emailRecord = new PreviousRecords({ email })
                                 emailRecord.save()
@@ -115,7 +166,11 @@ function isAuth(req, res, next){
 }
 
 // ---------------------------------------- ACTIVATE ACCOUNT -----------------------------------------------
-router.post('/signin/activate-account', (req, res) => {
+router.post('/signin/activate-account/:id', (req, res) => {
+
+    // if id == false => send activation tocken is invalid
+    // if isActivated == false => activate account
+    // send activation is successful email
 
 })
 
@@ -128,8 +183,12 @@ router.post('/signin', (req, res) => {
         User.findOne({email: email})
         .then(user => {
             if (!user) {
-                console.log('user not found');
-                return res.json({msg: 'user not found'});
+                console.log('user not found')
+                return res.json({msg: 'user not found'})
+            }
+            if (!user.isActivated) {
+                console.log('account is not activated')
+                return res.json({msg: 'account is not activated'})
             }
             bcrypt.compare(password, user.password)
             .then(isValid => {

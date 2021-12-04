@@ -120,8 +120,9 @@ const myUser = new mongoose.Schema({
 		currentCity : {type: String},
 		hometown : {type: String}
 	},
-	aboutMe : {type: String}
+	aboutMe : {type: String},
 
+    isActivated: { type: Boolean }
 })
 
 
