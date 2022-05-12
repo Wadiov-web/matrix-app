@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React from 'react'
 
 function NotFound() {
     return (
@@ -9,4 +8,4 @@ function NotFound() {
     )
 }
 
-export default NotFound;
+export default NotFound

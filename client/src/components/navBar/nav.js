@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
-
+import React, { Component } from 'react'
 
 class Nav extends Component {
-
     render(){
         return (
-   
             <div className="nav">
                 <ul>
                     <li>home</li>
@@ -14,8 +11,8 @@ class Nav extends Component {
                     <li>about</li>
                 </ul>
             </div>
-        );
+        )
     }
 }
 
-export default Nav;
+export default Nav

@@ -3,8 +3,8 @@ import './home.css';
 import './mymsgs.css';
 import Suggested from './suggests';
 import Chat from './chat';
-import axios from 'axios';
-
+import http from '../http/axios.config'
+import URL from '../http/URL'
 
 class Home extends Component {
     constructor(props){
@@ -26,7 +26,7 @@ class Home extends Component {
                         // Turn to false on client
                         elmt.news = false
                         // Turn to false on server
-                        axios.post('/api/remove-news', {friendId: elmt.friendId})
+                        http.post('/api/remove-news', {friendId: elmt.friendId})
                     }
                 }
                 return elmt
@@ -38,7 +38,7 @@ class Home extends Component {
 
     componentDidMount(){
         // Fetch friends from the backend
-        axios.get('/api/get-friends')
+        http.get('/api/get-friends')
         .then(res => {
             this.setState(() => ({users: res.data}))
         }).catch(err => console.log(err))
@@ -46,7 +46,6 @@ class Home extends Component {
         // receive news
         this.props.socketHome.on('newMsg', packet => {
             if (packet.from !== this.state.openChat) {
-                console.log('from news it is RED now')
                 // turn it into red
                 this.setState(() => ({
                     users: this.state.users.map(elmt => {
@@ -54,8 +53,7 @@ class Home extends Component {
                             // Turn to true on client
                             elmt.news = true
                             // Turn to true on server
-                            axios.post('/api/add-news', {friendId: elmt.friendId})
-                            console.log('I did it')
+                            http.post('/api/add-news', {friendId: elmt.friendId})
                         }
                         return elmt
                     })
@@ -66,63 +64,60 @@ class Home extends Component {
 
 
     render() {
-        console.log('home render.......')
-        console.log(this.state.openChat)
-
         return (
-            <div className="activities">
-                <div className="div1">
-                    <h1>My messages</h1>
-                    <div className="mssg">
-                        <div id="space">
-                            <p id="tag">Friends</p>
+            <div className="allHome">	
+                <div className="activities">
+                    <div className="div1">
+                        <h1>My messages</h1>
+                        <div className="mssg">
+                            <div id="space">
+                                <p id="tag">Friends</p>
+                            </div>
+                            {this.state.users.length > 0 ? this.state.users.map(user => {
+                            if (user.news && !user.connected) {
+                                return (
+                                <div key={Math.random()} id="friend" onClick={this.switchStatus.bind(this, user)} >
+                                    <img src={`${URL}/uploads/${user.friendImage}`} /> 
+                                    <p id="msgname">{user.friendName}</p>
+                                    <p id="news">new</p>
+                                </div>)
+                            }
+                            if (user.connected && !user.news) {
+                                return (
+                                <div key={Math.random()} id="friend" onClick={this.switchStatus.bind(this, user)} >
+                                    <div id="connect"></div>
+                                    <img src={`${URL}/uploads/${user.friendImage}`} /> 
+                                    <p id="msgname">{user.friendName}</p>
+                                </div>)
+                            }
+                            if (user.news && user.connected) {
+                                return (
+                                <div key={Math.random()} id="friend" onClick={this.switchStatus.bind(this, user)} >
+                                    <div id="connect"></div>
+                                    <img src={`${URL}/uploads/${user.friendImage}`} /> 
+                                    <p id="msgname">{user.friendName}</p>
+                                    <p id="news">new</p>
+                                </div>)
+                            }                    
+                            if (!user.news && !user.connected){
+                                return (
+                                <div key={Math.random()} id="friend" onClick={this.switchStatus.bind(this, user)} >
+                                    <img src={`${URL}/uploads/${user.friendImage}`} /> 
+                                    <p id="msgname">{user.friendName}</p>
+                                </div>)
+                            }
+                            }) : <h2>no friends so far</h2>}
                         </div>
-
-                        {this.state.users.length > 0 ? this.state.users.map(user => {
-                        if (user.news && !user.connected) {
-                            return (
-                            <div id="friend" onClick={this.switchStatus.bind(this, user)} >
-                                <img src={`/uploads/${user.friendImage}`} /> 
-                                <p id="msgname">{user.friendName}</p>
-                                <p id="news">new</p>
-                            </div>)
-                        }
-                        if (user.connected && !user.news) {
-                            return (
-                            <div id="friend" onClick={this.switchStatus.bind(this, user)} >
-                                <div id="connect"></div>
-                                <img src={`/uploads/${user.friendImage}`} /> 
-                                <p id="msgname">{user.friendName}</p>
-                            </div>)
-                        }
-                        if (user.news && user.connected) {
-                            return (
-                            <div id="friend" onClick={this.switchStatus.bind(this, user)} >
-                                <div id="connect"></div>
-                                <img src={`/uploads/${user.friendImage}`} /> 
-                                <p id="msgname">{user.friendName}</p>
-                                <p id="news">new</p>
-                            </div>)
-                        }                    
-                        if (!user.news && !user.connected){
-                            return (
-                            <div id="friend" onClick={this.switchStatus.bind(this, user)} >
-                                <img src={`/uploads/${user.friendImage}`} /> 
-                                <p id="msgname">{user.friendName}</p>
-                            </div>)
-                        }
-                        }) : <h2>no friends so far</h2>}
                     </div>
+                    <Suggested getVisited={this.props.getVisited} />     
                 </div>
-
-                <Suggested getVisited={this.props.getVisited} />
                 {this.state.chatWindow ? 
                 (<Chat 
                     concernedOne={this.state.concernedFriend} 
                     closeOff={this.closeChat} 
                     socketChat={this.props.socketHome}
                     loggedIn={this.props.loggedIn}
-                />) : null}
+                />) : null}                                        
             </div>
         )
     }

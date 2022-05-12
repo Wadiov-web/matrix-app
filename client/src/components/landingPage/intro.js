@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import './intro.css'
 
 class Intro extends Component {
-    
     render(){
         return (
-     
             <div className="container">
                 <div id="content">
                     <h1>Welcome to Meet Up App where you</h1>
@@ -21,7 +19,6 @@ class Intro extends Component {
                         </div> 
                     </div>
                 </div>
-
                 <div id="about">
                     <h1>About Us</h1>
                     <p>Hello from the out side Instead, it will copy all the configuration files and
@@ -30,11 +27,11 @@ class Intro extends Component {
                         will still work, but they will point to the copied scripts so you can
                         tweak them. At this point you’re on your own project 
                         so you have full control over them. All of the commands except
-                        will still work, but they will point to the copied.</p>
-                        <div id="btn3">
-                            <button>Learn More</button>
-                        </div>
-                        
+                        will still work, but they will point to the copied.
+                    </p>
+                    <div id="btn3">
+                        <button>Learn More</button>
+                    </div>
                 </div>
             </div>
         )

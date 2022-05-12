@@ -1,15 +1,8 @@
 const mongoose = require('mongoose');
 
-
-
-
 const previousRecords = new mongoose.Schema({
-   email: {
-       type: String
-   }
+   email: { type: String }
 })
-
-
 
 const PreviousRecords = mongoose.model('previousRecords', previousRecords)
 

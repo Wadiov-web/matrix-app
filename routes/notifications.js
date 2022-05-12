@@ -2,29 +2,50 @@ const express = require('express')
 const router = express.Router()
 const User = require('../model/user')
 
-//---------------------------------------------- Getting Invitations -------------------------------------------------------------------------------
+function isAuth(req, res, next){
+    if(req.session.userID){
+        return next()
+    } else {
+        return res.json({msg: 'you are not authenticated'})
+    }
+}
 
-router.get('/api/get-invitations', (req, res) => {
-   
+function getImage(invits, cb){ 
+    let finalInvits = []
+    for(let i = 0; i < invits.length; i++){
+        User.findOne({_id: invits[i].from})
+        .then(specUser => {
+            finalInvits.push({
+                    image: specUser.userImage,
+                _id: invits[i]._id,
+                    from: invits[i].from,
+                    username: invits[i].username,
+                    date: invits[i].date 
+                })   
+                if(i === invits.length - 1) return cb(finalInvits)
+        }).catch(err => console.error(err))
+    }
+}
+
+//---------------------------------------------- Getting Invitations -------------------------------------------------------------------------------
+router.get('/api/get-invitations', isAuth, (req, res) => {
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-        
-        if (loggedIn.newInvitations.length > 0){
-            res.status(200).json(loggedIn.newInvitations)
-        } else {
+        if (loggedIn.newInvitations.length > 0){    
+            let invits = loggedIn.newInvitations
+            getImage(invits, result => {
+                res.status(200).json(result)    
+            })
+	    } else {
             res.status(204).json({message: 'No invitations were found'})
         }
-        
     }).catch(err => console.log(err)) 
 })
 
 //------------------------------------------------------------------- DENY INVITATION ------------------------------------------------------
-
-router.post('/api/deny-invitations', (req, res) => {
-   
+router.post('/api/deny-invitations', isAuth, (req, res) => {
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-        
         loggedIn.notifs.push({
             username: req.body.invitUsername,
             msg: 'you have denied his invitation request'
@@ -35,33 +56,22 @@ router.post('/api/deny-invitations', (req, res) => {
             const f = inviter.requestIsSent.filter(reqt => reqt.userId != loggedIn._id)
             inviter.requestIsSent = f
             inviter.save()
-            .then(result => {
-                console.log('user is removed from requestIsSent and saved ' + result)
-
-            }).catch(err => console.log(err)) 
         }).catch(err => console.log(err))
-
-
         const ready = loggedIn.newInvitations.filter(invit => req.body.from != invit.from)
         loggedIn.newInvitations = ready
         loggedIn.save()
-        .then(result => {
-            res.status(200).json({invitations: loggedIn.newInvitations, notifications: loggedIn.notifs})
-
+        .then(resp => {
+	        getImage(loggedIn.newInvitations, result => {
+		        res.status(200).json({invitations: result, notifications: loggedIn.notifs})
+            })
         }).catch(err => console.log(err)) 
-
     }).catch(err => console.log(err)) 
 })
 
 //----------------------------------------------------- CONFIRM INVITATION ------------------------------------------------------------
-
-router.post('/api/confirm-invitations', (req, res) => {
-    
-    console.log(req.body)
-    
+router.post('/api/confirm-invitations', isAuth, (req, res) => {    
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-
         // Inviter part
         User.findOne({_id: req.body.from})
         .then(inviter => {
@@ -72,12 +82,10 @@ router.post('/api/confirm-invitations', (req, res) => {
             // remove me from inviter's requestIsSent[]
             const f2 = inviter.requestIsSent.filter(reqt => reqt.userId != loggedIn._id)
             inviter.requestIsSent = f2
-
             inviter.save()
             .then(result => {
                 console.log('inviter part is successfully done ' + result)
             }).catch(err => console.log(err)) 
-
             // loggedIn part
             // add user to my userFriends[]
             loggedIn.userFriends.push({friendImage: inviter.userImage, friendId: req.body.from, friendName: req.body.invitUsername, news: false})
@@ -87,23 +95,19 @@ router.post('/api/confirm-invitations', (req, res) => {
             const f = loggedIn.newInvitations.filter(invit => req.body.from != invit.from)
             loggedIn.newInvitations = f
             loggedIn.save()
-            .then(result => {
-                console.log('my part is successfully done ' + result)
-                res.status(200).json({invitations: loggedIn.newInvitations, notifications: loggedIn.notifs})
+            .then(resp => {
+		        getImage(loggedIn.newInvitations, result => {
+                    res.status(200).json({invitations: result, notifications: loggedIn.notifs})
+                })
             }).catch(err => console.log(err))
-
         }).catch(err => console.log(err)) 
-
     }).catch(err => console.log(err)) 
 })
 
 //--------------------------------------------------- GET NOTIFS ----------------------------------------------------------------
-
-router.get('/api/get-notifications', (req, res) => {
-   
+router.get('/api/get-notifications', isAuth, (req, res) => {
     User.findOne({_id: req.session.userID})
     .then(loggedIn => {
-
         if (loggedIn.notifs.length > 0){
             res.status(200).json(loggedIn.notifs)
         } else {

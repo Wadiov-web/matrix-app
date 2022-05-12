@@ -1,7 +1,6 @@
 import { React, Component} from 'react'
 import '../profile/profile.css'
-import axios from 'axios'
-
+import http from '../http/axios.config'
 
 class AboutVisited extends Component{
     constructor(props){
@@ -11,20 +10,14 @@ class AboutVisited extends Component{
         }
     }
     
-
     componentDidMount() {
-        console.log('this.props.visitedId')
-        console.log(this.props.visitedId)
-        axios.get(`/api/get-visited-aboutMe/${this.props.visitedId}`)
+        http.get(`/api/get-visited-aboutMe/${this.props.visitedId}`)
         .then(res => {
-            console.log(res)
             this.setState({aboutMe: res.data.aboutMe})
         }).catch(err => console.log(err))
     }
 
     render() {
-        console.log('render sub component')
-
         return (
             <div className="side1">
                 <div className="friendsNumber">
@@ -32,7 +25,6 @@ class AboutVisited extends Component{
                     <p>Friends</p>
                 </div>
                 <div className="userText">
-
                     {this.state.aboutMe ?
                     <div>
                         <p id="aboutMe">About me</p>

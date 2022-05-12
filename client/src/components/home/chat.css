@@ -1,9 +1,11 @@
 .div3{
+    position: absolute;
+    bottom: 0;
+    right: 0;    
     width: 500px;
     height: 770px;
-  /* background-color: rgb(83, 71, 255);*/
+    background-color: rgb(83, 71, 255);
     margin-left: 20px;
-   /* text-align: center;*/
 }
 .div3 h1{
     margin-top: 92px;
@@ -51,7 +53,7 @@
 }
 #data{
     background-color: turquoise;
-    width: 200px;
+    max-width: 300px;
     border-radius: 15px;
     margin-right: 0;
     margin-left: auto;
@@ -85,4 +87,13 @@
     margin: 5px;
     cursor: pointer;
     outline: none;
+}
+
+#chatImg{
+    max-width: 290px;
+    max-height: 400px;
+}
+
+#fileInput[type="file"]{
+   display: none;
 }

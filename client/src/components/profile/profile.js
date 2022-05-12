@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import './profile.css'
 import {FaEllipsisV, FaUserCog, FaSignOutAlt } from 'react-icons/fa'
-import axios from 'axios'
-
 import Side1 from './side1'
 import Side2 from './side2'
 import MyAccount from './myAccount/myAccount'
+import http from '../http/axios.config'
+import URL from '../http/URL'
 
 class Profile extends Component {
-
     state = {
         more: false,
         myAccount: false,
@@ -22,25 +21,24 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        axios.get('/api/get-profile-bar')
+        http.get('/api/get-profile-bar')
         .then(res => {
             this.setState({username: res.data.username, image: res.data.imageName})
         }).catch(err => console.log(err))
     }
 
     more = () => { this.setState(() => ({more: !this.state.more})) }
-
     myAccount = () => { this.setState(() => ({myAccount: true, more: false})) }
     goBack = () => { this.setState(() => ({myAccount: false})) }
    
     logout = () => {
-        axios.post('/logout')
+        http.post('/logout')
         .then(res => {
-            if (res.status == 200) {
+            if (res.status === 200) {
                 localStorage.setItem('SignedInStatus', false)
                 this.props.myprop.history.push('/signin')
             } else {
-                console.log(`Server could'nt log user out`)
+                console.log(`Server couldn't log user out`)
             }
         }).catch(err => console.log(err))
     }
@@ -58,21 +56,18 @@ class Profile extends Component {
         e.preventDefault()
         let fd = new FormData()
         fd.append('image', this.state.imageInput)
-
-        axios.post('/api/update-image', fd)
+        http.post('/api/update-image', fd)
         .then(res => {
-            
             this.setState({error: res.data.msg})
             setTimeout(() => this.setState({error: ''}), 3000)
         }).catch(err => console.log(err))
     }
 
-
     render() {
         return (
             <div className="profileDiv">
                 <div className="tab0">
-                    <img src={`/uploads/${this.state.image}`} onClick={this.openMenu} />
+                    <img src={`${URL}/uploads/${this.state.image}`} onClick={this.openMenu} />
                     {this.state.menu ?
                     <div id="imageMenu">
                         <div onClick={this.viewImage}><p>view image</p></div>
@@ -95,25 +90,22 @@ class Profile extends Component {
                 </div>
 
                 <div className="sidesContainer">
-                    {this.state.myAccount ? <MyAccount goBack={this.goBack} /> :
+                    {this.state.myAccount ? <MyAccount logout={this.logout} goBack={this.goBack} /> :
                     <React.Fragment>
                         <Side1 />
                         <Side2 />
                     </React.Fragment>
                     }
                 </div>
-
                 {this.state.viewImage ?
                 <div className="viewModal">
                     <div onClick={this.closeVI}>X</div>
                     <h1>view Image</h1>
-                    <img src={`/uploads/${this.state.image}`} />
+                    <img src={`${URL}/uploads/${this.state.image}`} />
                 </div> : null}
                 {this.state.updateImage ?
                 <div className="updateModal">
                     <div onClick={this.closeUI}>X</div>
-                    
-
                     <div className="updateDiv">
                         <h1>update Image</h1>
                         <p>{this.state.error}</p>
@@ -124,7 +116,6 @@ class Profile extends Component {
                         </form>
                     </div>
                 </div> : null}
-
             </div>
         )
     }

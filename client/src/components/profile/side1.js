@@ -1,7 +1,6 @@
 import { React, Component} from 'react'
 import './profile.css'
-import axios from 'axios'
-
+import http from '../http/axios.config'
 
 class Side1 extends Component{
     state = {
@@ -12,30 +11,23 @@ class Side1 extends Component{
     }
 
     componentDidMount() {
-        axios.get('/api/get-aboutMe')
+        http.get('/api/get-aboutMe')
         .then(res => {
-            console.log(res)
             this.setState({aboutMe: res.data.aboutMe, input: res.data.aboutMe, friendsCount: res.data.friendsCount})
         }).catch(err => console.log(err))
     }
 
     onChange = (e) => { this.setState({input: e.target.value})}
     save = () => {
-        console.log(this.state.input)
-
-        axios.post('/api/update-aboutMe', {aboutMe: this.state.input})
+        http.post('/api/update-aboutMe', {aboutMe: this.state.input})
         .then(res => {
-            console.log(res)
             this.setState({aboutMe: res.data.aboutMe, input: res.data.aboutMe})
         }).catch(err => console.log(err))
     }
 
-
-
     edit = () => { this.setState(() => ({edit: !this.state.edit})) }
 
     render() {
-        console.log('side1 component')
         return (
             <div className="side1">
                 <div className="friendsNumber">
@@ -44,9 +36,7 @@ class Side1 extends Component{
                 </div>
                 <div className="userText">
                     <p id="aboutMe">About me</p>
-
                     {this.state.aboutMe ?
-
                         this.state.edit ?
                             <div className="save">
                                 <textarea value={this.state.input} onChange={this.onChange} ></textarea>
@@ -73,9 +63,7 @@ class Side1 extends Component{
                             <button onClick={this.save}>Save</button>
                         </div>
                     }
-
                 </div>
-
             </div>
         )
     }
